@@ -1,0 +1,227 @@
+NOTEBOOK 2:
+EJERCICIO 1:
+EJERCICIO 2:
+EJERCICIO 3:
+3.1
+mysql> select title from film limit 10;
++------------------+
+| title            |
++------------------+
+| ACADEMY DINOSAUR |
+| ACE GOLDFINGER   |
+| ADAPTATION HOLES |
+| AFFAIR PREJUDICE |
+| AFRICAN EGG      |
+| AGENT TRUMAN     |
+| AIRPLANE SIERRA  |
+| AIRPORT POLLOCK  |
+| ALABAMA DEVIL    |
+| ALADDIN CALENDAR |
++------------------+
+10 rows in set (0.01 sec)
+/////////////////////////////////
+3.2
+mysql> select distinct release_year from film limit 10;
++--------------+
+| release_year |
++--------------+
+|         2006 |
++--------------+
+1 row in set (0.03 sec)
+////////////////////////////////
+3.3
+mysql> select title,rental_duration from film where rental_duration >=4 limit 10;
++------------------+-----------------+
+| title            | rental_duration |
++------------------+-----------------+
+| ACADEMY DINOSAUR |               6 |
+| ADAPTATION HOLES |               7 |
+| AFFAIR PREJUDICE |               5 |
+| AFRICAN EGG      |               6 |
+| AIRPLANE SIERRA  |               6 |
+| AIRPORT POLLOCK  |               6 |
+| ALADDIN CALENDAR |               6 |
+| ALAMO VIDEOTAPE  |               6 |
+| ALASKA PHANTOM   |               6 |
+| ALI FOREVER      |               4 |
++------------------+-----------------+
+10 rows in set (0.00 sec)
+////////////////////////////////////////
+3.4
+mysql> select customer_id, rental_id,amount, payment_date from payment where payment_date between "2005-07-01" and "2005-08-01" limit 10;
++-------------+-----------+--------+---------------------+
+| customer_id | rental_id | amount | payment_date        |
++-------------+-----------+--------+---------------------+
+|           1 |      4526 |   5.99 | 2005-07-08 03:17:05 |
+|           1 |      4611 |   5.99 | 2005-07-08 07:33:56 |
+|           1 |      5244 |   4.99 | 2005-07-09 13:24:07 |
+|           1 |      5326 |   4.99 | 2005-07-09 16:38:01 |
+|           1 |      6163 |   7.99 | 2005-07-11 10:13:46 |
+|           1 |      7273 |   2.99 | 2005-07-27 11:31:22 |
+|           1 |      7841 |   4.99 | 2005-07-28 09:04:45 |
+|           1 |      8033 |   4.99 | 2005-07-28 16:18:23 |
+|           1 |      8074 |   0.99 | 2005-07-28 17:33:39 |
+|           1 |      8116 |   0.99 | 2005-07-28 19:20:07 |
++-------------+-----------+--------+---------------------+
+10 rows in set (0.01 sec)
+//////////////////////////////////
+EJERCICIO 4:
+4.1
+mysql> select count(*) from customer;
++----------+
+| count(*) |
++----------+
+|      599 |
++----------+
+1 row in set (0.00 sec)
+///////////////////////////
+4.2
+mysql> select customer_id,count(*) from rental group by customer_id limit 10;
++-------------+----------+
+| customer_id | count(*) |
++-------------+----------+
+|           1 |       32 |
+|           2 |       27 |
+|           3 |       26 |
+|           4 |       22 |
+|           5 |       38 |
+|           6 |       28 |
+|           7 |       33 |
+|           8 |       24 |
+|           9 |       23 |
+|          10 |       25 |
++-------------+----------+
+10 rows in set (0.00 sec)
+////////////////////////////////////
+4.3
+mysql> SELECT MAX(total) FROM (SELECT customer_id,count(*) as total FROM rental GROUP BY customer_id) as t1;
++------------+
+| MAX(total) |
++------------+
+|         46 |
++------------+
+1 row in set (0.01 sec)
+Te entrega en una tabla el total de arriendos del cliente que hizo mas entre todos organizado por su id
+///////////////////////////
+4.4
+Una sub consulta es un comando select dentro de otro comando
+////////////////////////////////////
+4.5
+mysql> SELECT staff_id, sum(amount) from payment group by staff_id;
++----------+-------------+
+| staff_id | sum(amount) |
++----------+-------------+
+|        1 |    33489.47 |
+|        2 |    33927.04 |
++----------+-------------+
+2 rows in set (0.22 sec)
+////////////////////////////////7
+4.6
+mysql> select staff_id,sum(amount) from payment where payment_date between "2005-08-23 00:00:01" and "2005-08-23 23:59:59" group by staff_id order by sum(amount) DESC limit 1;
++----------+-------------+
+| staff_id | sum(amount) |
++----------+-------------+
+|        1 |     1391.69 |
++----------+-------------+
+1 row in set (0.05 sec)
+////////////////////////////////
+EJERCICIO 5
+5,1
+mysql> select title,name from film inner join language as lan  on lan.language_id=film.language_id limit 10;
++------------------+---------+
+| title            | name    |
++------------------+---------+
+| ACADEMY DINOSAUR | English |
+| ACE GOLDFINGER   | English |
+| ADAPTATION HOLES | English |
+| AFFAIR PREJUDICE | English |
+| AFRICAN EGG      | English |
+| AGENT TRUMAN     | English |
+| AIRPLANE SIERRA  | English |
+| AIRPORT POLLOCK  | English |
+| ALABAMA DEVIL    | English |
+| ALADDIN CALENDAR | English |
++------------------+---------+
+10 rows in set (0.00 sec)
+//////////////////////////////////////////////
+5,2
+mysql> SELECT customer.first_name,customer.last_name,film.title FROM customer INNER JOIN rental ON customer.customer_id=rental.customer_id INNER JOIN inventory ON inventory.inventory_id=rental.inventory_id INNER JOIN film ON inventory.film_id=film.film_id WHERE film.title="CHICAGO NORTH";
++------------+-----------+---------------+
+| first_name | last_name | title         |
++------------+-----------+---------------+
+| ARNOLD     | HAVENS    | CHICAGO NORTH |
+| PENNY      | NEAL      | CHICAGO NORTH |
+| MARGIE     | WADE      | CHICAGO NORTH |
+| ALVIN      | DELOACH   | CHICAGO NORTH |
+| CAROLE     | BARNETT   | CHICAGO NORTH |
+| ALVIN      | DELOACH   | CHICAGO NORTH |
+| KATIE      | ELLIOTT   | CHICAGO NORTH |
+| RAMONA     | HALE      | CHICAGO NORTH |
+| ADRIAN     | CLARY     | CHICAGO NORTH |
+| TED        | BREAUX    | CHICAGO NORTH |
+| DALE       | RATCLIFF  | CHICAGO NORTH |
+| CRAIG      | MORRELL   | CHICAGO NORTH |
+| BRITTANY   | RILEY     | CHICAGO NORTH |
+| ANNIE      | RUSSELL   | CHICAGO NORTH |
+| JUAN       | FRALEY    | CHICAGO NORTH |
+| ERIK       | GUILLEN   | CHICAGO NORTH |
++------------+-----------+---------------+
+///////////////////////////////
+5,3
+mysql> SELECT customer.first_name,customer.last_name,city.city FROM city INNER JOIN address ON city.city_id=address.city_id INNER JOIN customer ON customer.address_id=address.address_id LIMIT 10;
++------------+-----------+----------------+
+| first_name | last_name | city           |
++------------+-----------+----------------+
+| MARY       | SMITH     | Sasebo         |
+| PATRICIA   | JOHNSON   | San Bernardino |
+| LINDA      | WILLIAMS  | Athenai        |
+| BARBARA    | JONES     | Myingyan       |
+| ELIZABETH  | BROWN     | Nantou         |
+| JENNIFER   | DAVIS     | Laredo         |
+| MARIA      | MILLER    | Kragujevac     |
+| SUSAN      | WILSON    | Hamilton       |
+| MARGARET   | MOORE     | Masqat         |
+| DOROTHY    | TAYLOR    | Esfahan        |
++------------+-----------+----------------+
+//////////////////////////////////////////////////
+5,4
+ mysql> SELECT count(rental.rental_id),film.title FROM rental INNER JOIN inventory on rental.inventory_id=inventory.inventory_id INNER JOIN film on inventory.film_id=film.film_id GROUP BY film.title LIMIT 10;
++-------------------------+------------------+
+| count(rental.rental_id) | title            |
++-------------------------+------------------+
+|                      23 | ACADEMY DINOSAUR |
+|                       7 | ACE GOLDFINGER   |
+|                      12 | ADAPTATION HOLES |
+|                      23 | AFFAIR PREJUDICE |
+|                      12 | AFRICAN EGG      |
+|                      21 | AGENT TRUMAN     |
+|                      15 | AIRPLANE SIERRA  |
+|                      18 | AIRPORT POLLOCK  |
+|                      12 | ALABAMA DEVIL    |
+|                      23 | ALADDIN CALENDAR |
++-------------------------+------------------+
+////////////////////////////////////////////////////
+5,5
+mysql> SELECT film.title, SUM(payment.amount) FROM film INNER JOIN inventory ON film.film_id=inventory.film_id INNER JOIN rental ON inventory.inventory_id=rental.inventory_id INNER JOIN payment ON rental.rental_id=payment.rental_id GROUP BY film.title ORDER BY SUM(payment.amount) DESC LIMIT 1;
++------------------+---------------------+
+| title            | SUM(payment.amount) |
++------------------+---------------------+
+| TELEGRAPH VOYAGE |              231.73 |
++------------------+---------------------+
+///////////////////////////////////////////////////7
+5,6
+mysql> SELECT customer.first_name, customer.last_name, sum(payment.amount) FROM customer INNER JOIN payment ON payment.customer_id=customer.customer_id WHERE payment.amount > 10 GROUP BY customer.customer_id LIMIT 10;
++------------+-----------+---------------------+
+| first_name | last_name | sum(payment.amount) |
++------------+-----------+---------------------+
+| PATRICIA   | JOHNSON   |               10.99 |
+| LINDA      | WILLIAMS  |               10.99 |
+| NANCY      | THOMAS    |               10.99 |
+| KAREN      | JACKSON   |               11.99 |
+| MICHELLE   | CLARK     |               10.99 |
+| ANGELA     | HERNANDEZ |               10.99 |
+| ANNA       | HILL      |               10.99 |
+| JANET      | PHILLIPS  |               10.99 |
+| JOYCE      | EDWARDS   |               10.99 |
+| DIANE      | COLLINS   |               10.99 |
++------------+-----------+---------------------+
